@@ -117,7 +117,7 @@ case class Router(unorderedRoutes: Set[Route],
     log(s"[router] Dispatching query $query")
     val queryParts = Router.queryParts(query)
 
-    currentPage.toOption.foreach(_.destroy())
+    currentPage.get.foreach(_.destroy())
     currentPage.clear()
 
     matchingRoute(queryParts) match {
@@ -125,15 +125,15 @@ case class Router(unorderedRoutes: Set[Route],
         log(s"[router] Found $route")
         val args = route.parseArguments(queryParts)
 
-        currentPage := route.page()
-        currentPage.get.render(InstantiatedRoute(route, args))
+        currentPage := Some(route.page())
+        currentPage.get.get.render(InstantiatedRoute(route, args))
 
       case _ =>
         error("[router] Choosing fallback route")
         fallback match {
           case Some(fb) =>
-            currentPage := fb.page()
-            currentPage.get.render(InstantiatedRoute(fb))
+            currentPage := Some(fb.page())
+            currentPage.get.get.render(InstantiatedRoute(fb))
           case None => error("[router] No route found")
         }
     }
