@@ -117,14 +117,11 @@ object HTML {
   }
 
   trait ButtonBase[T] extends Widget[T] { self: T =>
-    def element: dom.html.Element
-    override val rendered = element
-
     def tpe(value: ButtonType) = attribute("type", value.tpe)
   }
 
   case class Button(contents: View*) extends ButtonBase[Button] {
-    val element = DOM.createElement("button", contents)
+    override val rendered = DOM.createElement("button", contents)
   }
 
   case class Section(contents: View*) extends Widget[Section] {

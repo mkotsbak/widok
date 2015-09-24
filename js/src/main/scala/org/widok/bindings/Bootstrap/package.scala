@@ -143,14 +143,14 @@ package object Bootstrap {
   }
 
   case class Button(contents: View*) extends ButtonBase[Button] {
-    override def element = HTML.Button(contents: _*).element
+    override val rendered = HTML.Button(contents: _*).rendered
   }
 
   case class AnchorButton(contents: View*)
     extends ButtonBase[AnchorButton]
     with HTML.AnchorBase[AnchorButton]
   {
-    override def element = HTML.Anchor(contents: _*).rendered
+    val rendered = HTML.Anchor(contents: _*).rendered
   }
 
   sealed trait Size { val cssSuffix: String }
